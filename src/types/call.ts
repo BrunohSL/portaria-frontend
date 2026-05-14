@@ -6,7 +6,7 @@ export interface CallSession {
   flow_id?: string;
   twilio_call_sid?: string;
   caller_number: string;
-  current_step_id?: string;
+  current_node_id?: string;
   status: CallStatus;
   collected_data: Record<string, unknown>;
   started_at?: string;
@@ -25,8 +25,8 @@ export interface CallLog {
   call_session_id: string;
   condominium_id: string;
   event_type: string;
-  step_id?: string;
+  node_id?: string;
   payload?: Record<string, unknown>;
-  step?: { id: string; type: string; step_order: number };
+  node?: { id: string; type: string };
   created_at: string;
 }

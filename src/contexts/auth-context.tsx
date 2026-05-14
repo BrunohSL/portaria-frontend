@@ -36,10 +36,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         const state: AuthState = JSON.parse(stored);
         if (!state.token) { localStorage.removeItem(AUTH_STORAGE_KEY); setIsLoading(false); return; }
-        // For now, trust the stored user (backend doesn't have /me endpoint yet)
-        setUser(state.user);
+        const { user: serverUser } = await apiClient.get<{ user: { id: number; name: string; email: string; role: string; condominium_id: number | null; first_access: boolean } }>("/api/auth/me");
+        const validatedUser: User = {
+          id: String(serverUser.id),
+          name: serverUser.name,
+          email: serverUser.email,
+          role: serverUser.role as User["role"],
+          condominium_id: serverUser.condominium_id ? String(serverUser.condominium_id) : undefined,
+          first_access: serverUser.first_access,
+        };
+        setUser(validatedUser);
         setStatus("authenticated");
         setAuthCookie();
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ ...state, user: validatedUser }));
       } catch {
         localStorage.removeItem(AUTH_STORAGE_KEY);
         clearAuthCookie();

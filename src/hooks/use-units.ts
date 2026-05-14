@@ -34,3 +34,21 @@ export function useDeleteUnit(condominiumId: string) {
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["units", condominiumId] }); qc.invalidateQueries({ queryKey: ["condominiums", condominiumId] }); },
   });
 }
+
+export function useBatchUpdateUnits(condominiumId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (units: { id: string; level1_value?: string; level2_value?: string }[]) =>
+      apiClient.put<{ updated: number }>(`/api/condominiums/${condominiumId}/units/batch`, { units }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["units", condominiumId] }); },
+  });
+}
+
+export function useImportUnits(condominiumId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (rows: { level1_value: string; level2_value: string }[]) =>
+      apiClient.post<{ created: number; errors: { line: number; reason: string }[] }>(`/api/condominiums/${condominiumId}/units/import`, { rows }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["units", condominiumId] }); qc.invalidateQueries({ queryKey: ["condominiums", condominiumId] }); },
+  });
+}

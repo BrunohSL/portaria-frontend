@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { useCallSessions } from "@/hooks/use-calls";
 import { useCondominiums } from "@/hooks/use-condominiums";
 import { useAuth } from "@/hooks/use-auth";
@@ -39,7 +40,7 @@ export default function ChamadasPage() {
               <TableHeader><TableRow><TableHead>Numero</TableHead><TableHead>Status</TableHead><TableHead>Fluxo</TableHead><TableHead>Duracao</TableHead><TableHead>Inicio</TableHead></TableRow></TableHeader>
               <TableBody>{sessions.map((s) => (
                 <TableRow key={s.id}>
-                  <TableCell className="font-medium">{formatPhone(s.caller_number)}</TableCell>
+                  <TableCell className="font-medium"><Link href={`/chamadas/${s.id}`} className="hover:underline">{formatPhone(s.caller_number)}</Link></TableCell>
                   <TableCell><Badge variant={statusVariants[s.status]}>{statusLabels[s.status]}</Badge></TableCell>
                   <TableCell className="text-muted-foreground">{s.flow?.name || "-"}</TableCell>
                   <TableCell className="text-muted-foreground">{formatDuration(s.duration_seconds)}</TableCell>

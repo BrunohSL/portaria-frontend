@@ -9,8 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Building2 } from "lucide-react";
-
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
@@ -30,8 +28,9 @@ export default function LoginPage() {
   return (
     <Card>
       <CardHeader className="text-center">
-        <div className="mx-auto mb-2 flex size-12 items-center justify-center rounded-lg bg-primary text-primary-foreground"><Building2 className="size-6" /></div>
-        <CardTitle className="text-xl">Portaria</CardTitle>
+        <div className="mx-auto mb-2">
+          <img src="/logo-completo.png" alt="Portaria" className="h-10" />
+        </div>
         <CardDescription>Entre com suas credenciais</CardDescription>
       </CardHeader>
       <CardContent>

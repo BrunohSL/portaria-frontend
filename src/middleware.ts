@@ -13,5 +13,5 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 export const config = {
-  matcher: ["/dashboard/:path*", "/condominios/:path*", "/chamadas/:path*", "/auditoria/:path*", "/login"],
+  matcher: ["/dashboard/:path*", "/condominios/:path*", "/chamadas/:path*", "/usuarios/:path*", "/auditoria/:path*", "/login"],
 };

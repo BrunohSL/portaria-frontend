@@ -10,11 +10,12 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
+import { maskPhone, maskCnpj } from "@/lib/format";
 
 export function CreateCondominiumDialog() {
   const [open, setOpen] = useState(false);
   const createCondominium = useCreateCondominium();
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<CondominiumFormData>({ resolver: zodResolver(condominiumSchema), defaultValues: { level1_label: "Bloco", level2_label: "Apto" } });
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<CondominiumFormData>({ resolver: zodResolver(condominiumSchema) });
 
   async function onSubmit(data: CondominiumFormData) {
     try {
@@ -35,16 +36,16 @@ export function CreateCondominiumDialog() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2 col-span-2"><Label>Nome</Label><Input {...register("name")} placeholder="Nome do condominio" />{errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}</div>
-            <div className="space-y-2"><Label>CNPJ</Label><Input {...register("cnpj")} placeholder="00.000.000/0000-00" /></div>
-            <div className="space-y-2"><Label>Telefone</Label><Input {...register("phone")} placeholder="(00) 00000-0000" /></div>
+            <div className="space-y-2"><Label>CNPJ</Label><Input {...register("cnpj", { onChange: (e) => { const masked = maskCnpj(e.target.value); setValue("cnpj", masked); e.target.value = masked; } })} placeholder="00.000.000/0000-00" maxLength={18} /></div>
+            <div className="space-y-2"><Label>Telefone</Label><Input {...register("phone", { onChange: (e) => { const masked = maskPhone(e.target.value); setValue("phone", masked); e.target.value = masked; } })} placeholder="(00) 00000-0000" maxLength={15} /></div>
             <div className="space-y-2 col-span-2"><Label>Endereco</Label><Input {...register("address")} /></div>
             <div className="space-y-2"><Label>Cidade</Label><Input {...register("city")} /></div>
             <div className="space-y-2"><Label>Estado</Label><Input {...register("state")} /></div>
             <div className="space-y-2"><Label>CEP</Label><Input {...register("zip_code")} /></div>
-            <div className="space-y-2"><Label>Numero Twilio</Label><Input {...register("twilio_phone_number")} /></div>
-            <div className="space-y-2"><Label>Label Nivel 1</Label><Input {...register("level1_label")} placeholder="Ex: Bloco" /></div>
-            <div className="space-y-2"><Label>Label Nivel 2</Label><Input {...register("level2_label")} placeholder="Ex: Apto" /></div>
           </div>
+          <p className="text-xs text-muted-foreground">
+            Portões, ramais e nomenclatura (bloco/apto) são configurados em <span className="font-medium">Configurações de infraestrutura</span> após criar o condomínio.
+          </p>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
             <Button type="submit" disabled={createCondominium.isPending}>{createCondominium.isPending ? "Criando..." : "Criar"}</Button>

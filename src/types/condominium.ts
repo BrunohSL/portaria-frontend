@@ -8,10 +8,7 @@ export interface Condominium {
   state?: string;
   zip_code?: string;
   active: boolean;
-  twilio_phone_number?: string;
   fallback_extension?: string;
-  gates_config: Record<string, { dns: string; label: string }>;
-  extensions_config: Record<string, string>;
   level1_label: string;
   level2_label: string;
   created_at: string;
@@ -24,12 +21,11 @@ export interface Unit {
   condominium_id: string;
   level1_value: string;
   level2_value: string;
-  status: "occupied" | "vacant";
-  residents?: Resident[];
+  contacts?: Contact[];
   created_at: string;
 }
 
-export interface Resident {
+export interface Contact {
   id: string;
   condominium_id: string;
   unit_id?: string;
@@ -38,7 +34,7 @@ export interface Resident {
   phone?: string;
   phone_2?: string;
   email?: string;
-  type: "owner" | "tenant" | "dependent";
+  type: "owner" | "resident" | "visitor";
   active: boolean;
   can_authorize: boolean;
   notes?: string;

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
-import { LayoutDashboard, Building2, Phone, ClipboardList, ChevronLeft, ChevronRight } from "lucide-react";
+import { LayoutDashboard, Building2, Phone, ClipboardList, UserCog, ChevronLeft, ChevronRight } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 
@@ -16,6 +16,7 @@ const navItems: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["ADM"] },
   { href: "/condominios", label: "Condominios", icon: Building2, roles: ["ADM", "CLIENT_ADM", "SUPPORT"] },
   { href: "/chamadas", label: "Chamadas", icon: Phone, roles: ["ADM", "CLIENT_ADM", "SUPPORT"] },
+  { href: "/usuarios", label: "Usuarios", icon: UserCog, roles: ["ADM", "CLIENT_ADM"] },
   { href: "/auditoria", label: "Auditoria", icon: ClipboardList, roles: ["ADM"] },
 ];
 
@@ -50,8 +51,11 @@ export function Sidebar() {
   return (
     <aside className={cn("hidden lg:flex h-screen flex-col bg-sidebar border-r border-sidebar-border transition-all duration-300 ease-in-out", collapsed ? "w-16" : "w-64")}>
       <Link href="/dashboard" className={cn("flex h-14 items-center border-b border-sidebar-border px-4 shrink-0 transition-opacity hover:opacity-80", collapsed ? "justify-center" : "gap-2")}>
-        <Building2 className="size-6 shrink-0" />
-        {!collapsed && <span className="font-semibold text-sm">Portaria</span>}
+        {collapsed ? (
+          <img src="/logo-completo.png" alt="Portaria" className="h-8 w-8 object-contain shrink-0" />
+        ) : (
+          <img src="/logo-completo.png" alt="Portaria" className="h-8" />
+        )}
       </Link>
       <nav className="flex-1 overflow-y-auto py-4 px-2">
         <ul className="flex flex-col gap-1">
