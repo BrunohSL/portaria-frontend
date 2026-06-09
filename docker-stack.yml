@@ -12,9 +12,11 @@ services:
           memory: 256M
       labels:
         - "traefik.enable=true"
+        # Catch-all do domínio: pega tudo que NÃO for /api (que vai pro backend).
         - "traefik.http.routers.portaria-front.rule=Host(`central.portaria.ai`)"
         - "traefik.http.routers.portaria-front.entrypoints=websecure"
         - "traefik.http.routers.portaria-front.tls.certresolver=letsencryptresolver"
+        - "traefik.http.routers.portaria-front.priority=1"
         - "traefik.http.services.portaria-front.loadbalancer.server.port=3000"
       update_config:
         parallelism: 1

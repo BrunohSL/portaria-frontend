@@ -121,7 +121,7 @@ Em `/condominios/[id]/fluxos/[flowId]`, usando `@xyflow/react` com tema dark. Co
 
 ## Config
 
-- `next.config.ts`: `output: "standalone"`, `removeConsole` em prod, `optimizePackageImports` (lucide-react, date-fns), headers de segurança + **CSP**. O CSP tem `connect-src 'self' http://localhost:3000` fixo — **em produção precisa apontar pra URL real do backend** (`portaria-api.6lab.com.br`), senão as chamadas à API são bloqueadas.
+- `next.config.ts`: `output: "standalone"`, `removeConsole` em prod, `optimizePackageImports` (lucide-react, date-fns), headers de segurança + **CSP**. Em prod o front e a API ficam no **mesmo domínio** (`central.portaria.ai`, API roteada por path `/api` no Traefik), então o CSP usa `connect-src 'self'` (same-origin, sem CORS). Em dev, o `connect-src` libera `http://localhost:3000`. A `NEXT_PUBLIC_API_URL` é embutida no build (Dockerfile) — trocar de domínio exige rebuild da imagem.
 - `tsconfig.json`: paths `@/*` → `src/*`, strict.
 - `.env.local`: `NEXT_PUBLIC_API_URL=http://localhost:3000`.
 - **Sem Dockerfile / docker-stack / CI no repo** (diferente do guardia-tts-front). O build é `output: standalone` mas o deploy do front ainda não está versionado aqui — confirmar antes de assumir pipeline.
@@ -136,7 +136,7 @@ Em `/condominios/[id]/fluxos/[flowId]`, usando `@xyflow/react` com tema dark. Co
 
 ## Rules of engagement
 
-- **Não fazer `git commit` sem o usuário pedir.**
+- **NUNCA rodar `git commit`, `git add`/stage ou `git push` — nem após implementar, nem para "deixar pronto".** Git é responsabilidade exclusiva do usuário. Deixe as mudanças no working tree (sem stage) e apenas avise o que foi alterado.
 - **Frontend e backend são repos separados** — push/PR independente. Mudança em campo de API costuma exigir os dois lados.
 - **Não criar arquivos `.md`** (README, docs) a menos que pedido. **Não adicionar emojis** em código a menos que pedido.
 - **Comentários:** só quando o WHY não é óbvio.

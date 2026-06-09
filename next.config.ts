@@ -12,10 +12,9 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     const isDev = process.env.NODE_ENV !== "production";
-    // Em dev o front bate na API local; em prod, no domínio público.
-    const apiConnect = isDev
-      ? "http://localhost:3000"
-      : "https://portaria-api.6lab.com.br";
+    // Em prod, front e API ficam no mesmo domínio (central.portaria.ai), então
+    // 'self' já cobre. Em dev, o front bate na API local em :3000.
+    const apiConnect = isDev ? "http://localhost:3000" : "";
 
     return [
       {
