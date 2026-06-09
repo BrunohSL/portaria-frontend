@@ -314,7 +314,7 @@ export function ContactsTab({ condominiumId, condominium }: { condominiumId: str
                     <Input value={c.name} onChange={(e) => updateField(c.id, "name", e.target.value)} className="h-8 text-sm" />
                   </TableCell>
                   <TableCell>
-                    <Select value={c.unit_id} onValueChange={(v) => updateField(c.id, "unit_id", v)}>
+                    <Select value={c.unit_id} onValueChange={(v) => updateField(c.id, "unit_id", v ?? "")}>
                       <SelectTrigger className="h-8 text-sm w-36"><SelectValue placeholder="Selecione" /></SelectTrigger>
                       <SelectContent>
                         {units?.map((u) => (
@@ -324,7 +324,7 @@ export function ContactsTab({ condominiumId, condominium }: { condominiumId: str
                     </Select>
                   </TableCell>
                   <TableCell>
-                    <Select value={c.type} onValueChange={(v) => updateField(c.id, "type", v)}>
+                    <Select value={c.type} onValueChange={(v) => updateField(c.id, "type", v ?? "")}>
                       <SelectTrigger className="h-8 text-sm w-32"><SelectValue /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="owner">Proprietario</SelectItem>
@@ -357,7 +357,7 @@ export function ContactsTab({ condominiumId, condominium }: { condominiumId: str
                     />
                   </TableCell>
                   <TableCell>
-                    <Select value={row.unit_id} onValueChange={(v) => updateNewRow(row.tempId, "unit_id", v)}>
+                    <Select value={row.unit_id} onValueChange={(v) => updateNewRow(row.tempId, "unit_id", v ?? "")}>
                       <SelectTrigger className="h-8 text-sm w-36"><SelectValue placeholder={`${condominium.level1_label} - ${condominium.level2_label}`} /></SelectTrigger>
                       <SelectContent>
                         {units?.map((u) => (
@@ -367,7 +367,7 @@ export function ContactsTab({ condominiumId, condominium }: { condominiumId: str
                     </Select>
                   </TableCell>
                   <TableCell>
-                    <Select value={row.type} onValueChange={(v) => updateNewRow(row.tempId, "type", v)}>
+                    <Select value={row.type} onValueChange={(v) => updateNewRow(row.tempId, "type", v ?? "")}>
                       <SelectTrigger className="h-8 text-sm w-32"><SelectValue /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="owner">Proprietario</SelectItem>

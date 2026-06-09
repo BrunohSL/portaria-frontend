@@ -89,7 +89,7 @@ export default function UsuariosPage() {
                   <>
                     <div className="space-y-2">
                       <Label>Perfil</Label>
-                      <Select value={role} onValueChange={setRole}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>
+                      <Select value={role} onValueChange={(v) => setRole(v ?? "")}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>
                         <SelectItem value="ADM">Administrador</SelectItem>
                         <SelectItem value="CLIENT_ADM">Admin Condominio</SelectItem>
                         <SelectItem value="SUPPORT">Suporte</SelectItem>
@@ -98,7 +98,7 @@ export default function UsuariosPage() {
                     {role === "CLIENT_ADM" && (
                       <div className="space-y-2">
                         <Label>Condominio</Label>
-                        <Select value={condominiumId} onValueChange={setCondominiumId}><SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger><SelectContent>
+                        <Select value={condominiumId} onValueChange={(v) => setCondominiumId(v ?? "")}><SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger><SelectContent>
                           {condominiums?.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
                         </SelectContent></Select>
                       </div>

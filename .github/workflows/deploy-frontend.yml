@@ -1,0 +1,70 @@
+name: Deploy Portaria Frontend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'Dockerfile'
+      - 'docker-stack.yml'
+      - 'next.config.ts'
+      - 'postcss.config.mjs'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/deploy-frontend.yml'
+
+jobs:
+  deploy:
+    name: Build & Deploy Frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Clean previous build
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: rm -rf /tmp/portaria-front-build
+
+      - name: Copy files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "."
+          target: /tmp/portaria-front-build
+          strip_components: 0
+
+      - name: Build and deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            set -e
+            cd /tmp/portaria-front-build
+            SHORT_SHA="${{ github.sha }}"
+            SHORT_SHA="${SHORT_SHA:0:7}"
+
+            echo "=== Building Docker image (tag: ${SHORT_SHA}) ==="
+            docker build -f Dockerfile -t portaria-front:${SHORT_SHA} -t portaria-front:latest .
+
+            echo "=== Updating service ==="
+            docker service update --force --image portaria-front:${SHORT_SHA} portaria-front_portaria-front
+
+            echo "=== Waiting for convergence ==="
+            timeout 120 sh -c 'until docker service ls --filter name=portaria-front_portaria-front --format "{{.Replicas}}" | grep -q "1/1"; do sleep 2; done'
+
+            echo "=== Cleanup (keep last 5 tagged images) ==="
+            rm -rf /tmp/portaria-front-build
+            docker images portaria-front --format "{{.Tag}} {{.ID}}" | grep -v latest | sort -r | tail -n +6 | awk '{print $2}' | xargs -r docker rmi 2>/dev/null || true
+
+            echo "=== Deploy complete (${SHORT_SHA}) ==="

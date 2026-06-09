@@ -26,7 +26,7 @@ export default function ChamadasPage() {
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Chamadas</h1>
       {user?.role === "ADM" && (
-        <Select value={selectedCondominium} onValueChange={setSelectedCondominium}>
+        <Select value={selectedCondominium} onValueChange={(v) => setSelectedCondominium(v ?? "")}>
           <SelectTrigger className="w-64"><SelectValue placeholder="Selecione o condominio" /></SelectTrigger>
           <SelectContent>{condominiums?.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
         </Select>

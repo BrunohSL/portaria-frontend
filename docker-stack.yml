@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  portaria-front:
+    image: portaria-front:latest
+    networks:
+      - 6LabNet
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 256M
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.portaria-front.rule=Host(`portaria.6lab.com.br`)"
+        - "traefik.http.routers.portaria-front.entrypoints=websecure"
+        - "traefik.http.routers.portaria-front.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.portaria-front.loadbalancer.server.port=3000"
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+
+networks:
+  6LabNet:
+    external: true
