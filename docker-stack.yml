@@ -12,7 +12,7 @@ services:
           memory: 256M
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.portaria-front.rule=Host(`portaria.6lab.com.br`)"
+        - "traefik.http.routers.portaria-front.rule=Host(`central.portaria.ai`)"
         - "traefik.http.routers.portaria-front.entrypoints=websecure"
         - "traefik.http.routers.portaria-front.tls.certresolver=letsencryptresolver"
         - "traefik.http.services.portaria-front.loadbalancer.server.port=3000"
